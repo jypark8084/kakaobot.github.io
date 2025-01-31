@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>숫자 관리</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
+        #number { font-size: 50px; margin: 20px 0; }
+        button { font-size: 20px; padding: 10px; margin: 5px; }
+    </style>
+</head>
+<body>
+    <h1>현재 숫자</h1>
+    <div id="number">0</div>
+    <button onclick="updateNumber(1)">+1</button>
+    <button onclick="updateNumber(-1)">-1</button>
+    <script>
+        function updateNumber(amount) {
+            let numElement = document.getElementById("number");
+            let currentNumber = parseInt(numElement.innerText);
+            let newNumber = currentNumber + amount;
+            numElement.innerText = newNumber;
+
+            // 변경된 숫자를 localStorage에 저장 (서버 없이 유지)
+            localStorage.setItem("savedNumber", newNumber);
+        }
+
+        // 페이지 로드 시 저장된 값 불러오기
+        window.onload = function () {
+            let savedNumber = localStorage.getItem("savedNumber");
+            if (savedNumber !== null) {
+                document.getElementById("number").innerText = savedNumber;
+            }
+        };
+    </script>
+</body>
+</html>
