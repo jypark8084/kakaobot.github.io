@@ -1,27 +1,25 @@
-from flask import Flask, request, jsonify
+from flask import Flask, jsonify, request
 
 app = Flask(__name__)
 
-# 초기 숫자 값 설정
-current_value = 0
+# 숫자 초기값 설정
+number = 0
 
-# 현재 숫자 반환
 @app.route('/get_number', methods=['GET'])
 def get_number():
-    return jsonify({"number": current_value})
+    return jsonify({'number': number})
 
-# 숫자 변경 (더하거나 빼기)
 @app.route('/update_number', methods=['POST'])
 def update_number():
-    global current_value
-    data = request.json
-    if "operation" in data and "value" in data:
-        if data["operation"] == "add":
-            current_value += data["value"]
-        elif data["operation"] == "subtract":
-            current_value -= data["value"]
-    return jsonify({"number": current_value})
+    global number
+    data = request.get_json()
+    
+    if data['operation'] == 'add':
+        number += data['value']
+    elif data['operation'] == 'subtract':
+        number -= data['value']
 
-# 서버 실행
+    return jsonify({'number': number})
+
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    app.run(debug=True)

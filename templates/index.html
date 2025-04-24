@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>숫자 관리 시스템</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 50px;
+    }
+    #number {
+      font-size: 50px;
+      margin: 20px 0;
+    }
+    button {
+      font-size: 20px;
+      padding: 10px 20px;
+      margin: 5px;
+    }
+  </style>
+</head>
+<body>
+  <h1>현재 숫자</h1>
+  <div id="number">0</div>
+  <button onclick="updateNumber(1)">+1</button>
+  <button onclick="updateNumber(-1)">-1</button>
+
+  <script>
+    const API_BASE = "https://korea2025-server.onrender.com"; // Render 서버 주소
+
+    function getNumberFromServer() {
+      fetch(`${API_BASE}/api/get_number`)
+        .then(res => res.json())
+        .then(data => {
+          document.getElementById("number").innerText = data.number;
+        })
+        .catch(err => {
+          console.error("❌ 숫자 불러오기 실패:", err);
+          document.getElementById("number").innerText = "에러";
+        });
+    }
+
+    function updateNumber(amount) {
+      fetch(`${API_BASE}/api/update_number`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ amount: amount })
+      })
+        .then(res => res.json())
+        .then(data => {
+          document.getElementById("number").innerText = data.number;
+        })
+        .catch(err => {
+          console.error("❌ 숫자 업데이트 실패:", err);
+        });
+    }
+
+    // 페이지 로드시 숫자 불러오기
+    window.onload = getNumberFromServer;
+  </script>
+</body>
+</html>
